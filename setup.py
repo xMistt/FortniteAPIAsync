@@ -1,11 +1,15 @@
 import setuptools
+import re
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open('FortniteAPIAsync/__init__.py') as f:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+
 setuptools.setup(
     name="FortniteAPIAsync",
-    version="0.1.3",
+    version=version,
     author="xMistt",
     description="Asynchronous Python wrapper for Fortnite-API.com.",
     project_urls={

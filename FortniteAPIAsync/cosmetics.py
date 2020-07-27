@@ -427,10 +427,9 @@ class Cosmetics:
 
         data = await self.http.request(
             method="GET",
-            url="/v2/cosmetics/br/search/ids",
+            url=f"/v2/cosmetics/br/{fortnite_id}",
             params={
-                "language": language,
-                "id": fortnite_id
+                "language": language
             }
         )
 
