@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="FortniteAPIAsync",
-    version="0.1.2",
+    version="0.1.3",
     author="xMistt",
     description="Asynchronous Python wrapper for Fortnite-API.com.",
     project_urls={

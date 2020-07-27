@@ -275,7 +275,7 @@ class Cosmetics:
 
         return [BRCosmetic(cosmetic_data) for cosmetic_data in data['data']]
 
-    async def get_cosmetics_from_id(self, fortnite_id: str = None, language: str = 'en') -> BRCosmetic:
+    async def search_cosmetic_ids(self, fortnite_ids: str = None, language: str = 'en') -> BRCosmetic:
         """|coro|
 
         Fetches all cosmetics from id/s.
@@ -284,7 +284,7 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
-        fortnite_id: Optional[:class:`str`]
+        fortnite_ids: Optional[:class:`str`]
             Sets the cosmetic id (can be multiple).
 
         Raises
@@ -301,7 +301,7 @@ class Cosmetics:
 
         """
 
-        if not fortnite_id:
+        if not fortnite_ids:
             raise InvalidParameters('No search parameters provided. At least 1 is required.')
 
         data = await self.http.request(
@@ -309,7 +309,7 @@ class Cosmetics:
             url="/v2/cosmetics/br/search/ids",
             params={
                 "language": language,
-                "id": fortnite_id
+                "id": fortnite_ids
             }
         )
 
@@ -395,3 +395,50 @@ class Cosmetics:
             raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
 
         return [BRCosmetic(cosmetic_data) for cosmetic_data in data['data']['items']]
+
+    async def get_cosmetic_from_id(self, fortnite_id: str = None, language: str = 'en') -> BRCosmetic:
+        """|coro|
+
+        Fetches cosmetic from id.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+        fortnite_id: Optional[:class:`str`]
+            Sets the cosmetic id (can be multiple).
+
+        Raises
+        ------
+        InvalidParameters
+            If none or more than 1 parameters are provided.
+        NotFound
+            If no cosmetics are found matching parameters.
+
+        Returns
+        -------
+        :class:`BRCosmetic`:
+            BRCosmetic object containing information of the cosmetic.
+
+        """
+
+        if not fortnite_id:
+            raise InvalidParameters('No search parameters provided. At least 1 is required.')
+
+        data = await self.http.request(
+            method="GET",
+            url="/v2/cosmetics/br/search/ids",
+            params={
+                "language": language,
+                "id": fortnite_id
+            }
+        )
+
+        if data['status'] == 400:
+            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
+        elif data['status'] == 404:
+            raise NotFound(f"{data['error'][0].upper()}{data['error'][1:]}.")
+        elif data['status'] not in (200, 400, 404):
+            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
+
+        return BRCosmetic(data['data'])
