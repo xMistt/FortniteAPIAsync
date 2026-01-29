@@ -5,7 +5,6 @@ import datetime
 
 from typing import Optional, List
 
-
 class BRCosmetic:
     """Represents a Fortnite cosmetic.
 
@@ -45,7 +44,6 @@ class BRCosmetic:
         Datetime object which represents when the cosmetic was added to the API.
     shop_history: :class`list`:
         List of datetime objects which represent a shop release.
-
     """
 
     def __init__(self, data: dict) -> None:
@@ -53,22 +51,351 @@ class BRCosmetic:
 
         self.id = data.get('id')
         self.name = data.get('name')
-        self.type = data.get('type')
-        self.rarity = data.get('rarity')
-        self.series = data.get('series')
+        self.description = data.get('description')
+        self.exclusive_description = data.get('exclusiveDescription')
+        self.unlock_requirements = data.get('unlockRequirements')
+        self.custom_exclusive_callout = data.get('customExclusiveCallout')
+
+        self.type = CosmeticType(data.get('type', {}))
+        self.rarity = Rarity(data.get('rarity', {}))
+        self.series = Series(data.get('series', {}))
         self.set = data.get('set')
-        self.introduction = data.get('introduction')
+        self.introduction = Introduction(data.get('introduction', {}))
         self.images = data.get('images')
         self.variants = data.get('variants')
+
+        self.built_in_emote_ids = data.get('builtInEmoteIds')
+        self.search_tags = data.get('searchTags')
         self.gameplay_tags = data.get('gameplayTags')
+        self.meta_tags = data.get('metaTags')
         self.showcase_video = data.get('showcaseVideo')
+        self.dynamic_pak_id = data.get('dynamicPakId')
+        self.item_preview_hero_path = data.get('itemPreviewHeroPath')
         self.display_asset_path = data.get('displayAssetPath')
         self.definition_path = data.get('definitionPath')
-        self.path = data.get('path')
-        self.added = datetime.datetime.strptime(data.get('added'), "%Y-%m-%dT%H:%M:%SZ")
-        self.shop_history = [datetime.datetime.strptime(
-            date, "%Y-%m-%dT%H:%M:%SZ"
-        ) for date in data.get('shopHistory')] if data.get('shopHistory') is not None else None
+        self.added = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+        self.shop_history = [
+            datetime.datetime.fromisoformat(
+                date.replace('Z', '+00:00')
+            ) for date in data.get('shopHistory', [])
+        ]
+
+
+class CosmeticType:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.value: str = data.get('value')
+        self.display_value: str = data.get('displayValue')
+        self.backend_value: str = data.get('backendValue')
+
+
+class Rarity:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.value: str = data.get('value')
+        self.display_value: str = data.get('displayValue')
+        self.backend_value: str = data.get('backendValue')
+
+
+class Series:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.value: str = data.get('value')
+        self.image: str = data.get('image')
+        self.colors: list[str] = data.get('colors')
+        self.backend_value: str = data.get('backendValue')
+
+
+class Introduction:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.chapter: str = data.get('chapter')
+        self.season: str = data.get('season')
+        self.text: str = data.get('text')
+        self.backend_value: str = data.get('backendValue')
+
+
+class Set:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.value: str = data.get('value')
+        self.text: str = data.get('text')
+        self.backend_value: str = data.get('backendValue')
+
+
+class TrackDifficulty:
+    def __init__(self, data: dict) -> None:
+        self.vocals: int = data.get('vocals')
+        self.guitar: int = data.get('guitar')
+        self.bass: int = data.get('bass')
+        self.plastic_bass: int = data.get('plasticBass')
+        self.drums: int = data.get('drums')
+        self.plastic_drums: int = data.get('plasticDrums')
+
+
+class TrackCosmetic:
+    def __init__(self, data: dict) -> None:
+        self.raw = data
+
+        self.id: str = data.get('id')
+        self.dev_name: str = data.get('devName')
+        self.title: str = data.get('title')
+        self.artist: str = data.get('artist')
+        self.album: str = data.get('album')
+        self.release_year: int = data.get('releaseYear')
+        self.bpm: int = data.get('bpm')
+        self.duration: int = data.get('duration')
+        self.difficulty: TrackDifficulty = TrackDifficulty(
+            data.get('difficulty', {})
+        )
+        self.gameplay_tags: list[str] = data.get('gameplayTags')
+        self.genres: list[str] = data.get('genres')
+        self.album_art: str = data.get('albumArt')
+
+        self.added: datetime.datetime = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+        self.shop_history: list[datetime.datetime] = [
+            datetime.datetime.fromisoformat(
+                date.replace('Z', '+00:00')
+            ) for date in data.get('shopHistory', [])
+        ]
+
+
+class InstrumentCosmetic:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.id: str = data.get('id')
+        self.name: str = data.get('name')
+        self.description: str = data.get('description')
+        self.type: CosmeticType = CosmeticType(data.get('type'))
+        self.rarity: Rarity = Rarity(data.get('rarity'))
+        self.small_image: str = data.get('images', {}).get('small')
+        self.large_image: str = data.get('images', {}).get('large')
+        self.series: Series = Series(data.get('series'))
+        self.gameplay_tags: list[str] = data.get('gameplayTags')
+        self.path: str = data.get('path')
+        self.showcase_video: str = data.get('showcaseVideo')
+        self.added: datetime.datetime = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+        self.shop_history: list[datetime.datetime] = [
+            datetime.datetime.fromisoformat(
+                date.replace('Z', '+00:00')
+            ) for date in data.get('shopHistory', [])
+        ]
+
+
+class CarCosmetic:
+    def __init__(self, data: dict) -> None:
+        self.raw = data
+
+        self.id: str = data.get('id')
+        self.vehicle_id: str = data.get('vehicleId')
+        self.name: str = data.get('name')
+        self.description: str = data.get('description')
+        self.type: CosmeticType = CosmeticType(data.get('type', {}))
+        self.rarity: Rarity = Rarity(data.get('rarity', {}))
+        self.small_image: str = data.get('image', {}).get('small')
+        self.large_image: str = data.get('image', {}).get('large')
+        self.series: Series = Series(data.get('series', {}))
+        self.gameplay_tags: list[str] = data.get('gameplayTags')
+        self.path: str = data.get('path')
+        self.showcase_video: str = data.get('showcaseVideo')
+
+        self.added: datetime.datetime = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+        self.shop_history: list[datetime.datetime] = [
+            datetime.datetime.fromisoformat(
+                date.replace('Z', '+00:00')
+            ) for date in data.get('shopHistory', [])
+        ]
+
+
+class LegoCosmetic:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.id: str = data.get('id')
+        self.cosmetic_id: str = data.get('cosmeticId')
+        self.sound_library_tags: list[str] = data.get('soundLibraryTags')
+        self.small_image: str = data.get('images', {}).get('small')
+        self.large_image: str = data.get('images', {}).get('large')
+        self.wide_image:  str = data.get('images', {}).get('wide')
+        self.path: str = data.get('path')
+        self.added: datetime.datetime = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+
+
+class LegoKitCosmetic:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.id: str = data.get('id')
+        self.name: str = data.get('name')
+        self.type: CosmeticType = CosmeticType(data.get('type'))
+        self.value: str = data.get('value')
+        self.display_value: str = data.get('displayValue')
+        self.backend_value: str = data.get('backendValue')
+        self.series: Series = Series(data.get('series'))
+        self.gameplay_tags: list[str] = data.get('gameplayTags')
+        self.small_image: str = data.get('images', {}).get('small')
+        self.large_image: str = data.get('images', {}).get('large')
+        self.wide_image: str = data.get('images', {}).get('wide')
+        self.path: str = data.get('path')
+        self.added: datetime.datetime = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+        self.shop_history: list[datetime.datetime] = [
+            datetime.datetime.fromisoformat(
+                date.replace('Z', '+00:00')
+            ) for date in data.get('shopHistory', [])
+        ]
+
+
+class BeanCosmetic:
+    def __init__(self, data: dict) -> None:
+        self.raw: dict = data
+
+        self.id: str = data.get('id')
+        self.cosmetic_id: str = data.get('cosmeticId')
+        self.name: str = data.get('name')
+        self.gender: str = data.get('gender')
+        self.gameplay_tags: list[str] = data.get('gameplayTags')
+        self.small_image: str = data.get('images', {}).get('small')
+        self.large_image: str = data.get('images', {}).get('large')
+        self.path: str = data.get('path')
+        self.added: datetime.datetime = datetime.datetime.fromisoformat(
+            data['added'].replace('Z', '+00:00')
+        )
+
+
+class AllCosmetics:
+    def __init__(self, data: dict) -> None:
+        self.br: list[BRCosmetic] = [
+            BRCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('br', [])
+        ]
+        self.tracks: list[TrackCosmetic] = [
+            TrackCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('tracks', [])
+        ]
+        self.instruments: list[InstrumentCosmetic] = [
+            InstrumentCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('instruments', [])
+        ]
+        self.cars: list[CarCosmetic] = [
+            CarCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('cars', [])
+        ]
+        self.lego: list[LegoCosmetic] = [
+            LegoCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('lego', [])
+        ]
+        self.lego_kits: list[LegoKitCosmetic] = [
+            LegoKitCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('legoKits', [])
+        ]
+        self.beans: list[BeanCosmetic] = [
+            BeanCosmetic(cosmetic_data)
+            for cosmetic_data in data.get('beans', [])
+        ]
+
+class NewCosmeticsType:
+    def __init__(self,
+                 hash: str,
+                 last_addition: str,
+                 items: list,
+                 type: 'Type'
+                 ) -> None:
+        self.hash = hash
+        self.last_addition: datetime.datetime = datetime.datetime.fromisoformat(  # noqa
+            last_addition.replace('Z', '+00:00')
+        )
+        self.items: list[type] = [
+            type(cosmetic_data)
+            for cosmetic_data in items
+        ]
+
+
+class NewCosmetics:
+    def __init__(self, data: dict) -> None:
+        self.date: datetime.datetime = datetime.datetime.fromisoformat(
+            data.get('date', '1970-01-01T00:00:00Z').replace('Z', '+00:00')
+        )
+
+        self.hash = data.get('hashes', {}).get('all')
+        self.last_addition = data.get('lastAdditions', {}).get('all')
+
+        self.build = data.get('build')
+        self.previous_build = data.get('previousBuild')
+
+        self.br = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('br'),
+            last_addition=data.get('lastAdditions').get(
+                'br', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('br', []),
+            type=BRCosmetic
+        )
+        self.tracks = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('tracks'),
+            last_addition=data.get('lastAdditions').get(
+                'tracks', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('tracks', []),
+            type=TrackCosmetic
+        )
+        self.instruments = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('instruments'),
+            last_addition=data.get('lastAdditions').get(
+                'instruments', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('instruments', []),
+            type=InstrumentCosmetic
+        )
+        self.cars = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('cars'),
+            last_addition=data.get('lastAdditions').get(
+                'cars', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('cars', []),
+            type=CarCosmetic
+        )
+        self.lego = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('lego'),
+            last_addition=data.get('lastAdditions').get(
+                'lego', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('lego', []),
+            type=LegoCosmetic
+        )
+        self.lego_kits = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('legoKits'),
+            last_addition=data.get('lastAdditions').get(
+                'legoKits', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('legoKits', []),
+            type=LegoCosmetic
+        )
+        self.beans = NewCosmeticsType(
+            hash=data.get('hashes', {}).get('beans'),
+            last_addition=data.get('lastAdditions').get(
+                'beans', '1970-01-01T00:00:00Z'
+            ),
+            items=data.get('items', {}).get('beans', []),
+            type=BeanCosmetic
+        )
 
 
 class Cosmetics:
@@ -78,7 +405,8 @@ class Cosmetics:
     async def get_cosmetic(self, **params: dict) -> BRCosmetic:
         """|coro|
 
-        Fetches first cosmetic matching parameters. All parameters are optional but at least 1 is required.
+        Fetches first cosmetic matching parameters.
+        All parameters are optional but at least 1 is required.
 
         Parameters
         ----------
@@ -122,6 +450,8 @@ class Cosmetics:
             Sets the backend set.
         hasIntroduction: Optional[:class:`bool`]
             Sets whether there is an introduction.
+        backendIntroduction: Optional[:class:`int`]
+            Sets the introduction backend value.
         introductionChapter: Optional[:class:`str`]
             Sets the introduction chapter.
         introductionSeason: Optional[:class:`str`]
@@ -134,10 +464,18 @@ class Cosmetics:
             Sets whether there are gameplay tags.
         gameplayTag: Optional[:class:`str`]
             Sets the gameplay tag.
+        hasMetaTags: Optional[:class:`bool`]
+            Sets whether there are meta tags.
+        metaTag: Optional[:class:`str`]
+            Sets the meta tag.
+        hasDynamicPakId: Optional[:class:`bool`]
+            Sets whether a dynamic pak id is set.
+        dynamicPakId: Optional[:class:`str`]
+            Sets the dynamic pak id.
         added: Optional[:class:`int`]
             Sets the added date.
         addedSince: Optional[:class:`int`]
-            Sets teh date since it was added.
+            Sets the date since it was added.
         unseenFor: Optional[:class:`int`]
             Sets for how long its unseen.
         lastAppearance: Optional[:class:`int`]
@@ -146,7 +484,7 @@ class Cosmetics:
         Raises
         ------
         InvalidParameters
-            If none or more than 1 parameters are provided.
+            If none or more than 1 parameter is provided.
         NotFound
             If no cosmetics are found matching parameters.
 
@@ -154,31 +492,24 @@ class Cosmetics:
         -------
         :class:`BRCosmetic`:
             BRCosmetic object containing information of the cosmetic.
-
         """
 
         if not params:
-            raise InvalidParameters('No search parameters provided. At least 1 is required.')
+            raise InvalidParameters(
+                'No search parameters provided. At least 1 is required.'
+            )
 
         data = await self.http.request(
-            method="GET",
             url="/v2/cosmetics/br/search",
             params=params
         )
+        return BRCosmetic(data)
 
-        if data['status'] == 400:
-            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] == 404:
-            raise NotFound(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] not in (200, 400, 404):
-            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
-
-        return BRCosmetic(data['data'])
-
-    async def get_cosmetics(self, **params: dict) -> List[BRCosmetic]:
+    async def get_cosmetics(self, **params: dict) -> list[BRCosmetic]:
         """|coro|
 
-        Fetches all cosmetics matching parameters. All parameters are optional but at least 1 is required.
+        Fetches all cosmetics matching parameters.
+        All parameters are optional but at least 1 is required.
 
         Parameters
         ----------
@@ -222,6 +553,8 @@ class Cosmetics:
             Sets the backend set.
         hasIntroduction: Optional[:class:`bool`]
             Sets whether there is an introduction.
+        backendIntroduction: Optional[:class:`int`]
+            Sets the introduction backend value.
         introductionChapter: Optional[:class:`str`]
             Sets the introduction chapter.
         introductionSeason: Optional[:class:`str`]
@@ -234,10 +567,18 @@ class Cosmetics:
             Sets whether there are gameplay tags.
         gameplayTag: Optional[:class:`str`]
             Sets the gameplay tag.
+        hasMetaTags: Optional[:class:`bool`]
+            Sets whether there are meta tags.
+        metaTag: Optional[:class:`str`]
+            Sets the meta tag.
+        hasDynamicPakId: Optional[:class:`bool`]
+            Sets whether a dynamic pak id is set.
+        dynamicPakId: Optional[:class:`str`]
+            Sets the dynamic pak id.
         added: Optional[:class:`int`]
             Sets the added date.
         addedSince: Optional[:class:`int`]
-            Sets teh date since it was added.
+            Sets the date since it was added.
         unseenFor: Optional[:class:`int`]
             Sets for how long its unseen.
         lastAppearance: Optional[:class:`int`]
@@ -246,7 +587,7 @@ class Cosmetics:
         Raises
         ------
         InvalidParameters
-            If none or more than 1 parameters are provided.
+            If none or more than 1 parameter is provided.
         NotFound
             If no cosmetics are found matching parameters.
 
@@ -258,24 +599,21 @@ class Cosmetics:
         """
 
         if not params:
-            raise InvalidParameters('No search parameters provided. At least 1 is required.')
+            raise InvalidParameters(
+                'No search parameters provided. At least 1 is required.'
+            )
 
         data = await self.http.request(
-            method="GET",
             url="/v2/cosmetics/br/search/all",
             params=params
         )
 
-        if data['status'] == 400:
-            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] == 404:
-            raise NotFound(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] not in (200, 400, 404):
-            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
+        return [BRCosmetic(cosmetic_data) for cosmetic_data in data]
 
-        return [BRCosmetic(cosmetic_data) for cosmetic_data in data['data']]
-
-    async def search_cosmetic_ids(self, fortnite_ids: str = None, language: str = 'en') -> BRCosmetic:
+    async def search_cosmetic_ids(self,
+                                  fortnite_ids: str = None,
+                                  language: str = 'en'
+                                  ) -> list[BRCosmetic]:
         """|coro|
 
         Fetches all cosmetics from id/s.
@@ -290,7 +628,7 @@ class Cosmetics:
         Raises
         ------
         InvalidParameters
-            If none or more than 1 parameters are provided.
+            If none or more than 1 parameter is provided.
         NotFound
             If no cosmetics are found matching parameters.
 
@@ -302,10 +640,11 @@ class Cosmetics:
         """
 
         if not fortnite_ids:
-            raise InvalidParameters('No search parameters provided. At least 1 is required.')
+            raise InvalidParameters(
+                'No search parameters provided. At least 1 is required.'
+            )
 
         data = await self.http.request(
-            method="GET",
             url="/v2/cosmetics/br/search/ids",
             params={
                 "language": language,
@@ -313,16 +652,11 @@ class Cosmetics:
             }
         )
 
-        if data['status'] == 400:
-            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] == 404:
-            raise NotFound(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] not in (200, 400, 404):
-            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
+        return [BRCosmetic(cosmetic_data) for cosmetic_data in data]
 
-        return [BRCosmetic(cosmetic_data) for cosmetic_data in data['data']]
-
-    async def get_all_cosmetics(self, language: str = 'en') -> List[BRCosmetic]:
+    async def get_all_br_cosmetics(self,
+                                   language: str = 'en'
+                                   ) -> List[BRCosmetic]:
         """|coro|
 
         Fetches all cosmetics.
@@ -332,11 +666,6 @@ class Cosmetics:
         language: Optional[:class:`str`]
             Sets the output language.
 
-        Raises
-        ------
-        InvalidParameters
-            If the parameters are invalid.
-
         Returns
         -------
         List[:class:`BRCosmetic`]:
@@ -345,21 +674,15 @@ class Cosmetics:
         """
 
         data = await self.http.request(
-            method="GET",
             url="/v2/cosmetics/br/",
             params={
                 "language": language
             }
         )
 
-        if data['status'] == 400:
-            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] not in (200, 400):
-            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
+        return [BRCosmetic(cosmetic_data) for cosmetic_data in data]
 
-        return [BRCosmetic(cosmetic_data) for cosmetic_data in data['data']]
-
-    async def get_new_cosmetics(self, language: str = 'en') -> List[BRCosmetic]:
+    async def get_new_cosmetics(self, language: str = 'en') -> NewCosmetics:
         """|coro|
 
         Fetches all new cosmetics.
@@ -369,32 +692,21 @@ class Cosmetics:
         language: Optional[:class:`str`]
             Sets the output language.
 
-        Raises
-        ------
-        InvalidParameters
-            If the parameters are invalid.
-
         Returns
         -------
-        List[:class:`BRCosmetic`]:
-            List of BRCosmetic object containing information of the cosmetics.
-
+        NewCosmetics:
+            NewCosmetics object containing information of each cosmetic types
+            new items.
         """
 
         data = await self.http.request(
-            method="GET",
-            url="/v2/cosmetics/br/new",
+            url="/v2/cosmetics/new",
             params={
                 "language": language
             }
         )
 
-        if data['status'] == 400:
-            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] not in (200, 400):
-            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
-
-        return [BRCosmetic(cosmetic_data) for cosmetic_data in data['data']['items']]
+        return NewCosmetics(data)
 
     async def get_cosmetic_from_id(self, fortnite_id: str = None, language: str = 'en') -> BRCosmetic:
         """|coro|
@@ -411,7 +723,7 @@ class Cosmetics:
         Raises
         ------
         InvalidParameters
-            If none or more than 1 parameters are provided.
+            If none or more than 1 parameter is provided.
         NotFound
             If no cosmetics are found matching parameters.
 
@@ -426,18 +738,211 @@ class Cosmetics:
             raise InvalidParameters('No search parameters provided. At least 1 is required.')
 
         data = await self.http.request(
-            method="GET",
             url=f"/v2/cosmetics/br/{fortnite_id}",
             params={
                 "language": language
             }
         )
 
-        if data['status'] == 400:
-            raise InvalidParameters(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] == 404:
-            raise NotFound(f"{data['error'][0].upper()}{data['error'][1:]}.")
-        elif data['status'] not in (200, 400, 404):
-            raise UnknownHTTPException(f"{data['error'][0].upper()}{data['error'][1:]}.")
-
         return BRCosmetic(data['data'])
+
+    async def get_all_cosmetics(self,
+                                language: str = 'en'
+                                ) -> AllCosmetics:
+        """|coro|
+
+        Fetches all cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        :class:`AllCosmetics`:
+            AllCosmetics object containing all types cosmetics.
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/",
+            params={
+                "language": language
+            }
+        )
+
+        return AllCosmetics(data)
+
+    async def get_all_track_cosmetics(self,
+                                   language: str = 'en'
+                                   ) -> List[TrackCosmetic]:
+        """|coro|
+
+        Fetches all track cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        List[:class:`TrackCosmetic`]:
+            List of TrackCosmetic object containing information
+            of the cosmetics.
+
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/tracks/",
+            params={
+                "language": language
+            }
+        )
+
+        return [TrackCosmetic(cosmetic_data) for cosmetic_data in data]
+
+    async def get_all_instrument_cosmetics(self,
+                                           language: str = 'en'
+                                           ) -> list[InstrumentCosmetic]:
+        """|coro|
+
+        Fetches all instrument cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`InstrumentCosmetic`]:
+            List of InstrumentCosmetic object containing information
+            of the cosmetics.
+
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/instruments/",
+            params={
+                "language": language
+            }
+        )
+
+        return [InstrumentCosmetic(cosmetic_data) for cosmetic_data in data]
+
+    async def get_all_car_cosmetics(self,
+                                    language: str = 'en'
+                                    ) -> list[CarCosmetic]:
+        """|coro|
+
+        Fetches all car cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`CarCosmetic`]:
+            List of CarCosmetic object containing information
+            of the cosmetics.
+
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/cars/",
+            params={
+                "language": language
+            }
+        )
+
+        return [CarCosmetic(cosmetic_data) for cosmetic_data in data]
+
+    async def get_all_lego_cosmetics(self,
+                                     language: str = 'en'
+                                     ) -> list[LegoCosmetic]:
+        """|coro|
+
+        Fetches all lego cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`LegoCosmetic`]:
+            List of LegoCosmetic object containing information
+            of the cosmetics.
+
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/lego/",
+            params={
+                "language": language
+            }
+        )
+
+        return [LegoCosmetic(cosmetic_data) for cosmetic_data in data]
+
+    async def get_all_lego_kit_cosmetics(self,
+                                         language: str = 'en'
+                                         ) -> list[LegoKitCosmetic]:
+        """|coro|
+
+        Fetches all lego kit cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`LegoKitCosmetic`]:
+            List of LegoKitCosmetic object containing information
+            of the cosmetics.
+
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/lego/kits/",
+            params={
+                "language": language
+            }
+        )
+
+        return [LegoKitCosmetic(cosmetic_data) for cosmetic_data in data]
+
+    async def get_all_bean_cosmetics(self,
+                                     language: str = 'en'
+                                     ) -> list[BeanCosmetic]:
+        """|coro|
+
+        Fetches all bean cosmetics.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`BeanCosmetic`]:
+            List of BeanCosmetic object containing information
+            of the cosmetics.
+
+        """
+
+        data = await self.http.request(
+            url="/v2/cosmetics/beans/",
+            params={
+                "language": language
+            }
+        )
+
+        return [BeanCosmetic(cosmetic_data) for cosmetic_data in data]

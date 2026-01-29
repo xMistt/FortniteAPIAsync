@@ -2,18 +2,25 @@ from enum import Enum
 
 
 class AccountType(Enum):
-    EPIC = 'epic'
+    EPIC        = 'epic'
     PLAYSTATION = 'psn'
-    XBOX = 'xbl'
+    XBOX        = 'xbl'
 
 
 class StatsTimeWindow(Enum):
-    SEASON = 'season'
+    SEASON   = 'season'
     LIFETIME = 'lifetime'
 
 
 class StatsImage(Enum):
-    ALL = 'all'
+    ALL                = 'all'
     KEYBOARD_AND_MOUSE = 'keyboardMouse'
-    CONTROLLER = 'gamepad'
-    TOUCH = 'touch'
+    CONTROLLER         = 'gamepad'
+    TOUCH              = 'touch'
+    NONE               = 'none'
+
+
+class AESKeyFormat(Enum):
+    HEX    = 'hex'
+    BASE64 = 'base64'
+

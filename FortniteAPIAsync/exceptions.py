@@ -10,6 +10,10 @@ class NotFound(FortniteAPIException):
     pass
 
 
+class Private(FortniteAPIException):
+    pass
+
+
 class UnknownHTTPException(FortniteAPIException):
     pass
 
