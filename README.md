@@ -1,5 +1,5 @@
 # FortniteAPIAsync
-Python wrapper for Fortnite-API.
+Python wrapper for [Fortnite-API.com](https://fortnite-api.com).
 
 [![Downloads](https://pepy.tech/badge/fortniteapiasync)](https://pepy.tech/project/fortniteapiasync)
 [![Requires: Python 3.x](https://img.shields.io/pypi/pyversions/fortniteapiasync.svg)](https://pypi.org/project/fortniteapiasync/)
@@ -34,24 +34,24 @@ loop.close()
 This would output:<br>
 ```CID_029_Athena_Commando_F_Halloween```
 
-fortnitepy example:
+rebootpy example:
 ```python
-import fortnitepy
+import rebootpy
 import FortniteAPIAsync
 
-from fortnitepy.ext import commands
+from rebootpy.ext import commands
 
 
 bot = commands.Bot(
     command_prefix='!',
-    auth=fortnitepy.AuthorizationCodeAuth(
+    auth=rebootpy.AuthorizationCodeAuth(
         code=input('Enter authorization code: ')
     )
 )
 
 
 @bot.command()
-async def skin(ctx: fortnitepy.ext.commands.Context, *, content: str) -> None:
+async def skin(ctx: rebootpy.ext.commands.Context, *, content: str) -> None:
     try:
         cosmetic = await FortniteAPIAsync.get_cosmetic(
             matchMethod="contains",
@@ -62,7 +62,6 @@ async def skin(ctx: fortnitepy.ext.commands.Context, *, content: str) -> None:
         await ctx.send(f'Skin set to {cosmetic.id}.')
         print(f"Set skin to: {cosmetic.id}.")
         await client.party.me.set_outfit(asset=cosmetic.id)
-
     except FortniteAPIAsync.exceptions.NotFound:
         await ctx.send(f"Failed to find a skin with the name: {content}.")
         print(f"Failed to find a skin with the name: {content}.")
