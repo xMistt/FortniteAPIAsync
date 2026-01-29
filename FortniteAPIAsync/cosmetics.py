@@ -180,7 +180,7 @@ class InstrumentCosmetic:
         self.rarity: Rarity = Rarity(data.get('rarity'))
         self.small_image: str = data.get('images', {}).get('small')
         self.large_image: str = data.get('images', {}).get('large')
-        self.series: Series = Series(data.get('series'))
+        self.series: Series = Series(data.get('series', {}))
         self.gameplay_tags: list[str] = data.get('gameplayTags')
         self.path: str = data.get('path')
         self.showcase_video: str = data.get('showcaseVideo')
@@ -247,7 +247,7 @@ class LegoKitCosmetic:
         self.value: str = data.get('value')
         self.display_value: str = data.get('displayValue')
         self.backend_value: str = data.get('backendValue')
-        self.series: Series = Series(data.get('series'))
+        self.series: Series = Series(data.get('series', {}))
         self.gameplay_tags: list[str] = data.get('gameplayTags')
         self.small_image: str = data.get('images', {}).get('small')
         self.large_image: str = data.get('images', {}).get('large')
@@ -399,8 +399,8 @@ class NewCosmetics:
 
 
 class Cosmetics:
-    def __init__(self, client) -> None:
-        self.http = client.http
+    def __init__(self, client: 'APIClient') -> None:
+        self.client = client
 
     async def get_cosmetic(self, **params: dict) -> BRCosmetic:
         """|coro|
@@ -499,7 +499,7 @@ class Cosmetics:
                 'No search parameters provided. At least 1 is required.'
             )
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/br/search",
             params=params
         )
@@ -603,7 +603,7 @@ class Cosmetics:
                 'No search parameters provided. At least 1 is required.'
             )
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/br/search/all",
             params=params
         )
@@ -644,7 +644,7 @@ class Cosmetics:
                 'No search parameters provided. At least 1 is required.'
             )
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/br/search/ids",
             params={
                 "language": language,
@@ -673,7 +673,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/br/",
             params={
                 "language": language
@@ -699,7 +699,7 @@ class Cosmetics:
             new items.
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/new",
             params={
                 "language": language
@@ -737,14 +737,14 @@ class Cosmetics:
         if not fortnite_id:
             raise InvalidParameters('No search parameters provided. At least 1 is required.')
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url=f"/v2/cosmetics/br/{fortnite_id}",
             params={
                 "language": language
             }
         )
 
-        return BRCosmetic(data['data'])
+        return BRCosmetic(data)
 
     async def get_all_cosmetics(self,
                                 language: str = 'en'
@@ -764,7 +764,7 @@ class Cosmetics:
             AllCosmetics object containing all types cosmetics.
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/",
             params={
                 "language": language
@@ -793,7 +793,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/tracks/",
             params={
                 "language": language
@@ -822,7 +822,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/instruments/",
             params={
                 "language": language
@@ -851,7 +851,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/cars/",
             params={
                 "language": language
@@ -880,7 +880,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/lego/",
             params={
                 "language": language
@@ -909,7 +909,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/lego/kits/",
             params={
                 "language": language
@@ -938,7 +938,7 @@ class Cosmetics:
 
         """
 
-        data = await self.http.request(
+        data = await self.client.http.api_request(
             url="/v2/cosmetics/beans/",
             params={
                 "language": language

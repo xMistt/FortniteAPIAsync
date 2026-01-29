@@ -210,6 +210,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# PyCharm
+.idea
+
 test.py
 checklist.txt
 breaking.txt

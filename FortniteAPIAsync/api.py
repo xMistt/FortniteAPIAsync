@@ -29,7 +29,7 @@ class APIClient:
     async def get_aes(self,
                       key_format: AESKeyFormat = AESKeyFormat.HEX
                       ) -> AESKeys:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url='/v2/aes',
             params={
                 "keyFormat": key_format.value
@@ -38,7 +38,7 @@ class APIClient:
         return AESKeys(data)
 
     async def get_creator_code(self, name: str) -> CreatorCode:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url='/v2/creatorcode',
             params={
                 "name": name
@@ -47,7 +47,7 @@ class APIClient:
         return CreatorCode(data)
 
     async def get_map(self, language: str = "en") -> Map:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url='/v1/map',
             params={
                 "language": language
@@ -56,7 +56,7 @@ class APIClient:
         return Map(data)
 
     async def get_news(self, language: str = "en") -> News:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url='/v2/news/br',
             params={
                 "language": language
@@ -65,7 +65,7 @@ class APIClient:
         return News(data)
 
     async def get_playlists(self, language: str = "en") -> list[Playlist]:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url='/v1/playlists',
             params={
                 "language": language
@@ -77,7 +77,7 @@ class APIClient:
                                  playlist_id: str,
                                  language: str = "en"
                                  ) -> Playlist:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url=f'/v1/playlists/{playlist_id}',
             params={
                 "language": language
@@ -92,7 +92,7 @@ class APIClient:
         time_window: StatsTimeWindow = StatsTimeWindow.LIFETIME,
         image: StatsImage = StatsImage.NONE
     ) -> Stats:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url=f'/v2/stats/br/v2',
             params={
                 "name": name,
@@ -109,7 +109,7 @@ class APIClient:
         time_window: StatsTimeWindow = StatsTimeWindow.LIFETIME,
         image: StatsImage = StatsImage.NONE
     ) -> Stats:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url=f'/v2/stats/br/v2/{account_id}',
             params={
                 "timeWindow": time_window.value,
@@ -121,7 +121,7 @@ class APIClient:
     async def get_banners(self,
                           language: str = "en"
                           ) -> list[Banner]:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url=f'/v1/banners',
             params={
                 "language": language
@@ -132,7 +132,7 @@ class APIClient:
     async def get_banner_colors(self,
                                 language: str = "en"
                                 ) -> list[BannerColor]:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url=f'/v1/banners/colors',
             params={
                 "language": language
@@ -143,7 +143,7 @@ class APIClient:
     async def get_shop(self,
                        language: str = "en"
                        ) -> Shop:
-        data = await self.api_request(
+        data = await self.http.api_request(
             url=f'/v2/shop',
             params={
                 "language": language

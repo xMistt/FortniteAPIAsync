@@ -1,4 +1,4 @@
-from .cosmetics import CosmeticType, Rarity, Series, Introduction
+from .cosmetics import CosmeticType, Rarity, Series, Introduction, Set
 
 class Banner:
     def __init__(self, data: dict) -> None:

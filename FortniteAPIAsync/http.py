@@ -46,7 +46,7 @@ class HTTPClient:
             **kwargs
         ) as request:
             raw = await request.json()
-            data = await raw['data'] if 'data' in raw else raw
+            data = raw['data'] if 'data' in raw else raw
 
             if request.status == 400:
                 raise InvalidParameters(data.get('error'))
