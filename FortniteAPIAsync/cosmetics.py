@@ -877,7 +877,6 @@ class Cosmetics:
         list[:class:`LegoCosmetic`]:
             List of LegoCosmetic object containing information
             of the cosmetics.
-
         """
 
         data = await self.client.http.api_request(

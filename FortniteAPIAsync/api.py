@@ -29,6 +29,20 @@ class APIClient:
     async def get_aes(self,
                       key_format: AESKeyFormat = AESKeyFormat.HEX
                       ) -> AESKeys:
+        """|coro|
+
+        Return information about the current build including
+        the main aes key and all dynamic keys.
+
+        Parameters
+        ----------
+        key_format: :class:`AESKeyFormat`
+            Sets the AES key format, defaults to `AESKeyFormat.HEX`.
+
+        Returns
+        -------
+        :class:`AESKeys`
+        """
         data = await self.http.api_request(
             url='/v2/aes',
             params={
@@ -38,6 +52,20 @@ class APIClient:
         return AESKeys(data)
 
     async def get_creator_code(self, name: str) -> CreatorCode:
+        """|coro|
+
+        Return all information about a specific Creator Code such as owner's
+        Epic account, whether its verified and whether its active.
+
+        Parameters
+        ----------
+        name: :class:`str`
+            The creator code to get information for.
+
+        Returns
+        -------
+        :class:`CreatorCode`
+        """
         data = await self.http.api_request(
             url='/v2/creatorcode',
             params={
@@ -47,6 +75,19 @@ class APIClient:
         return CreatorCode(data)
 
     async def get_map(self, language: str = "en") -> Map:
+        """|coro|
+
+        Returns information about the current Battle Royale map.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        :class:`Map`
+        """
         data = await self.http.api_request(
             url='/v1/map',
             params={
@@ -56,6 +97,19 @@ class APIClient:
         return Map(data)
 
     async def get_news(self, language: str = "en") -> News:
+        """|coro|
+
+        Get the current news posts.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        :class:`News`
+        """
         data = await self.http.api_request(
             url='/v2/news/br',
             params={
@@ -65,6 +119,20 @@ class APIClient:
         return News(data)
 
     async def get_playlists(self, language: str = "en") -> list[Playlist]:
+        """|coro|
+
+        Get all playlists currently in the game (old in-active playlists
+        will not appear)
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`Playlist`]:
+        """
         data = await self.http.api_request(
             url='/v1/playlists',
             params={
@@ -77,6 +145,22 @@ class APIClient:
                                  playlist_id: str,
                                  language: str = "en"
                                  ) -> Playlist:
+        """|coro|
+
+        Get information about a specific playlist by playlist id
+        (old in-active playlists will not be searchable appear)
+
+        Parameters
+        ----------
+        playlist_id: :class:`str`
+            The playlist id to search for.
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        :class:`Playlist`
+        """
         data = await self.http.api_request(
             url=f'/v1/playlists/{playlist_id}',
             params={
@@ -92,6 +176,27 @@ class APIClient:
         time_window: StatsTimeWindow = StatsTimeWindow.LIFETIME,
         image: StatsImage = StatsImage.NONE
     ) -> Stats:
+        """|coro|
+
+        Gets Battle Royale stats for the provided username on the provided
+        platform.
+
+        Parameters
+        ----------
+        name: :class:`str`
+            The username to search for.
+        account_type: Optional[:class:`AccountType`]
+            The platform to search the provided name on.
+        time_window: Optional[:class:`StatsTimeWindow`]
+            Stats time window to fetch (lifetime or seasonal).
+        image: Optional[:class:`StatsImage`]
+            Which input to create the image for, if not provided an image
+            won't be generated.
+
+        Returns
+        -------
+        :class:`Stats`
+        """
         data = await self.http.api_request(
             url=f'/v2/stats/br/v2',
             params={
@@ -109,6 +214,24 @@ class APIClient:
         time_window: StatsTimeWindow = StatsTimeWindow.LIFETIME,
         image: StatsImage = StatsImage.NONE
     ) -> Stats:
+        """|coro|
+
+        Gets Battle Royale stats for the provided account id.
+
+        Parameters
+        ----------
+        account_id: :class:`str`
+            The Epic account id to fetch stats for.
+        time_window: Optional[:class:`StatsTimeWindow`]
+            Stats time window to fetch (lifetime or seasonal).
+        image: Optional[:class:`StatsImage`]
+            Which input to create the image for, if not provided an image
+            won't be generated.
+
+        Returns
+        -------
+        :class:`Stats`
+        """
         data = await self.http.api_request(
             url=f'/v2/stats/br/v2/{account_id}',
             params={
@@ -121,6 +244,19 @@ class APIClient:
     async def get_banners(self,
                           language: str = "en"
                           ) -> list[Banner]:
+        """|coro|
+
+        Gets information about all banners.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`Banners`]:
+        """
         data = await self.http.api_request(
             url=f'/v1/banners',
             params={
@@ -132,6 +268,19 @@ class APIClient:
     async def get_banner_colors(self,
                                 language: str = "en"
                                 ) -> list[BannerColor]:
+        """|coro|
+
+        Gets information about all banner colours.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        list[:class:`BannerColor`]:
+        """
         data = await self.http.api_request(
             url=f'/v1/banners/colors',
             params={
@@ -143,6 +292,19 @@ class APIClient:
     async def get_shop(self,
                        language: str = "en"
                        ) -> Shop:
+        """|coro|
+
+        Gets the current Battle Royale shop.
+
+        Parameters
+        ----------
+        language: Optional[:class:`str`]
+            Sets the output language.
+
+        Returns
+        -------
+        :class:`Shop`
+        """
         data = await self.http.api_request(
             url=f'/v2/shop',
             params={
