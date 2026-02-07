@@ -16,7 +16,7 @@ APIClient
 Cosmetics
 ~~~~~~~~~~~
 
-.. attribute:: APIClient.cosmetics
+.. attributetable:: Cosmetics
 
     Provides access to cosmetic-related API endpoints.
 
