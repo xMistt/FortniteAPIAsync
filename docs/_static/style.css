@@ -345,7 +345,7 @@ a:hover {
 .sig-name,
 .sig-prename
 {
-  color: var(--api-name-color);
+  /* color: var(--api-name-color); */
 }
 
 dl.class>dt .property,
@@ -355,7 +355,7 @@ dl.enum>dt .property,
 dl.exception>dt .property,
 dl.function>dt .property,
 dl.method>dt .property,
-dl.type>dt .property 
+dl.type>dt .property
 {
   color: var(--qualname-prefix);
 }
@@ -404,7 +404,7 @@ dl.exception>dt {
 
 .py-attribute-table-column>span {
   font-weight: bold;
-  color: var(--attr-table-title-color);
+  /* color: var(--attr-table-title-color); */
 }
 
 main .py-attribute-table-column>ul {
@@ -426,7 +426,7 @@ main .py-attribute-table-column>ul {
 
 .py-attribute-table-entry>a {
   padding-left: 0.5em;
-  color: var(--attr-table-text-color);
+  /* color: var(--attr-table-text-color); */
   flex-grow: 1;
 }
 
@@ -445,7 +445,7 @@ main .py-attribute-table-column>ul {
   padding-left: 0.5em;
   text-align: right;
   font-size: 0.9em;
-  color: var(--attr-table-badge-color);
+  /* color: var(--attr-table-badge-color); */
   font-weight: bold;
   -moz-user-select: none;
   -webkit-user-select: none;
