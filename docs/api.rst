@@ -18,6 +18,8 @@ Cosmetics
 
 .. attributetable:: Cosmetics
 
+Accessible via :attr:`APIClient.cosmetics`.
+
 .. autoclass:: Cosmetics()
     :members:
 
