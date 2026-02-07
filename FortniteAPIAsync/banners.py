@@ -1,6 +1,42 @@
 from .cosmetics import CosmeticType, Rarity, Series, Introduction, Set
 
 class Banner:
+    """Represents a banner.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the banner.
+    dev_name: :class:`str`
+        The developer name of the banner.
+    name: :class:`str`
+        The name of the banner.
+    description: :class:`str`
+        The description of the banner.
+    category: :class:`str`
+        The category of the banner.
+    full_usage_rights: :class:`bool`
+        Whether the banner has full usage rights.
+    rarity: :class:`Rarity`
+        Object containing information on banner rarity.
+    series: :class:`Series`
+        Object containing information on banner series.
+    set: :class:`Set`
+        Object containing information on banner set.
+    introduction: :class:`Introduction`
+        Object containing information on banner introduction.
+    icon_image: :class:`str`
+        The icon image of the banner.
+    small_icon_image: :class:`str`
+        The small icon image of the banner.
+    gameplay_tags: :class:`list`[:class:`str`]
+        List of the banner gameplay tags.
+    path: :class:`str`
+        File path of banner.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -21,6 +57,22 @@ class Banner:
 
 
 class BannerColor:
+    """Represents a banner color.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the banner color.
+    color: :class:`str`
+        The color value of the banner.
+    category: :class:`str`
+        The category of the banner color.
+    sub_category_group: :class:`str`
+        The sub-category group of the banner color.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 

@@ -13,37 +13,55 @@ class BRCosmetic:
     ----------
     raw: :class:`dict`
         Raw data from FortniteAPI (can be used to reconstruct object)
-    id: :class:`str`:
+    id: :class:`str`
         The ID of the cosmetic.
-    name: :class:`str`:
+    name: :class:`str`
         The name of the cosmetic.
-    type: :class:`dict`:
-        Dictionary containing information on cosmetic type.
-    rarity: :class:`dict`:
-        Dictionary containing information on cosmetic rarity.
-    series: :class:`dict`:
-        Dictionary containing information on cosmetic series.
-    set: :class:`dict`:
-        Dictionary containing information on cosmetic set.
-    introduction: :class`dict`:
-        Dictionary containing information on cosmetic introduction.
-    images: :class`dict`:
+    description: :class:`str`
+        The description of the cosmetic.
+    exclusive_description: :class:`str`
+        The exclusive description of the cosmetic.
+    unlock_requirements: :class:`str`
+        The unlock requirements of the cosmetic.
+    custom_exclusive_callout: :class:`str`
+        The custom exclusive callout of the cosmetic.
+    type: :class:`CosmeticType`
+        Object containing information on cosmetic type.
+    rarity: :class:`Rarity`
+        Object containing information on cosmetic rarity.
+    series: :class:`Series`
+        Object containing information on cosmetic series.
+    set: :class:`Set`
+        Object containing information on cosmetic set.
+    introduction: :class:`Introduction`
+        Object containing information on cosmetic introduction.
+    images: :class:`dict`
         Dictionary containing the images of the cosmetic.
-    variants: :class`dict`:
-        Dictionary containing information on cosmetic variants.
-    gameplay_tags: :class`list`:
+    variants: :class:`list`[:class:`dict`]
+        List containing information on cosmetic variants.
+    built_in_emote_ids: :class:`list`[:class:`str`]
+        List of the cosmetic's built-in emote IDs.
+    search_tags: :class:`list`[:class:`str`]
+        List of the cosmetic's search tags.
+    gameplay_tags: :class:`list`[:class:`str`]
         List of the cosmetics gameplay tags.
-    showcase_video: :class`str`:
+    meta_tags: :class:`list`[:class:`str`]
+        List of the cosmetic's meta tags.
+    showcase_video: :class:`str`
         Represents a YouTube video id of a video showcasing the cosmetic.
-    display_asset_path: :class`str`:
+    dynamic_pak_id: :class:`str`
+        Represents the dynamic pak id of the cosmetic.
+    item_preview_hero_path: :class:`str`
+        Represents the item preview hero path of the cosmetic.
+    display_asset_path: :class:`str`
         File path of the display asset.
-    definition_path: :class`str`:
+    definition_path: :class:`str`
         File path of the cosmetic definition
-    path: :class`str`:
+    path: :class:`str`
         File path of cosmetic.
-    added: :class`datetime.datetime`:
+    added: :class:`datetime.datetime`
         Datetime object which represents when the cosmetic was added to the API.
-    shop_history: :class`list`:
+    shop_history: :class:`list`[:class:`datetime.datetime`]
         List of datetime objects which represent a shop release.
     """
 
@@ -86,6 +104,20 @@ class BRCosmetic:
 
 
 class CosmeticType:
+    """Represents a cosmetic type.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    value: :class:`str`
+        The cosmetic type value.
+    display_value: :class:`str`
+        The display value of the cosmetic type.
+    backend_value: :class:`str`
+        The backend value of the cosmetic type.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -95,6 +127,20 @@ class CosmeticType:
 
 
 class Rarity:
+    """Represents a cosmetic rarity.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    value: :class:`str`
+        The cosmetic rarity value.
+    display_value: :class:`str`
+        The display value of the cosmetic rarity.
+    backend_value: :class:`str`
+        The backend value of the cosmetic rarity.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -104,6 +150,22 @@ class Rarity:
 
 
 class Series:
+    """Represents a cosmetic series.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    value: :class:`str`
+        The cosmetic series value.
+    image: :class:`str`
+        The image associated with the cosmetic series.
+    colors: :class:`list`[:class:`str`]
+        List of colors associated with the cosmetic series.
+    backend_value: :class:`str`
+        The backend value of the cosmetic series.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -114,6 +176,22 @@ class Series:
 
 
 class Introduction:
+    """Represents cosmetic introduction information.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    chapter: :class:`str`
+        The chapter the cosmetic was introduced in.
+    season: :class:`str`
+        The season the cosmetic was introduced in.
+    text: :class:`str`
+        The introduction text of the cosmetic.
+    backend_value: :class:`str`
+        The backend value of the cosmetic introduction.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -124,6 +202,20 @@ class Introduction:
 
 
 class Set:
+    """Represents a cosmetic set.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    value: :class:`str`
+        The cosmetic set value.
+    text: :class:`str`
+        The text associated with the cosmetic set.
+    backend_value: :class:`str`
+        The backend value of the cosmetic set.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -133,6 +225,24 @@ class Set:
 
 
 class TrackDifficulty:
+    """Represents track difficulty values.
+
+    Attributes
+    ----------
+    vocals: :class:`int`
+        The vocal difficulty rating.
+    guitar: :class:`int`
+        The guitar difficulty rating.
+    bass: :class:`int`
+        The bass difficulty rating.
+    plastic_bass: :class:`int`
+        The plastic bass difficulty rating.
+    drums: :class:`int`
+        The drums difficulty rating.
+    plastic_drums: :class:`int`
+        The plastic drums difficulty rating.
+    """
+
     def __init__(self, data: dict) -> None:
         self.vocals: int = data.get('vocals')
         self.guitar: int = data.get('guitar')
@@ -143,6 +253,42 @@ class TrackDifficulty:
 
 
 class TrackCosmetic:
+    """Represents a track cosmetic.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the track cosmetic.
+    dev_name: :class:`str`
+        The developer name of the track.
+    title: :class:`str`
+        The title of the track.
+    artist: :class:`str`
+        The artist of the track.
+    album: :class:`str`
+        The album the track belongs to.
+    release_year: :class:`int`
+        The release year of the track.
+    bpm: :class:`int`
+        The beats per minute of the track.
+    duration: :class:`int`
+        The duration of the track in seconds.
+    difficulty: :class:`TrackDifficulty`
+        Object containing difficulty information for the track.
+    gameplay_tags: :class:`list`[:class:`str`]
+        List of gameplay tags associated with the track.
+    genres: :class:`list`[:class:`str`]
+        List of genres associated with the track.
+    album_art: :class:`str`
+        The album art image for the track.
+    added: :class:`datetime.datetime`
+        Datetime object which represents when the track was added to the API.
+    shop_history: :class:`list`[:class:`datetime.datetime`]
+        List of datetime objects which represent a shop release.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw = data
 
@@ -172,6 +318,40 @@ class TrackCosmetic:
 
 
 class InstrumentCosmetic:
+    """Represents an instrument cosmetic.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the instrument cosmetic.
+    name: :class:`str`
+        The name of the instrument cosmetic.
+    description: :class:`str`
+        The description of the instrument cosmetic.
+    type: :class:`CosmeticType`
+        Object containing information on cosmetic type.
+    rarity: :class:`Rarity`
+        Object containing information on cosmetic rarity.
+    small_image: :class:`str`
+        The small image of the instrument cosmetic.
+    large_image: :class:`str`
+        The large image of the instrument cosmetic.
+    series: :class:`Series`
+        Object containing information on cosmetic series.
+    gameplay_tags: :class:`list`[:class:`str`]
+        List of the instrument cosmetic gameplay tags.
+    path: :class:`str`
+        File path of cosmetic.
+    showcase_video: :class:`str`
+        Represents a YouTube video id of a video showcasing the instrument cosmetic.
+    added: :class:`datetime.datetime`
+        Datetime object which represents when the instrument cosmetic was added to the API.
+    shop_history: :class:`list`[:class:`datetime.datetime`]
+        List of datetime objects which represent a shop release.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -197,6 +377,42 @@ class InstrumentCosmetic:
 
 
 class CarCosmetic:
+    """Represents a car cosmetic.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the car cosmetic.
+    vehicle_id: :class:`str`
+        The vehicle ID associated with the car cosmetic.
+    name: :class:`str`
+        The name of the car cosmetic.
+    description: :class:`str`
+        The description of the car cosmetic.
+    type: :class:`CosmeticType`
+        Object containing information on cosmetic type.
+    rarity: :class:`Rarity`
+        Object containing information on cosmetic rarity.
+    small_image: :class:`str`
+        The small image of the car cosmetic.
+    large_image: :class:`str`
+        The large image of the car cosmetic.
+    series: :class:`Series`
+        Object containing information on cosmetic series.
+    gameplay_tags: :class:`list`[:class:`str`]
+        List of the car cosmetic gameplay tags.
+    path: :class:`str`
+        File path of cosmetic.
+    showcase_video: :class:`str`
+        Represents a YouTube video id of a video showcasing the car cosmetic.
+    added: :class:`datetime.datetime`
+        Datetime object which represents when the car cosmetic was added to the API.
+    shop_history: :class:`list`[:class:`datetime.datetime`]
+        List of datetime objects which represent a shop release.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw = data
 
@@ -224,6 +440,30 @@ class CarCosmetic:
 
 
 class LegoCosmetic:
+    """Represents a LEGO cosmetic.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the LEGO cosmetic.
+    cosmetic_id: :class:`str`
+        The associated cosmetic ID.
+    sound_library_tags: :class:`list`[:class:`str`]
+        List of sound library tags associated with the LEGO cosmetic.
+    small_image: :class:`str`
+        The small image of the LEGO cosmetic.
+    large_image: :class:`str`
+        The large image of the LEGO cosmetic.
+    wide_image: :class:`str`
+        The wide image of the LEGO cosmetic.
+    path: :class:`str`
+        File path of cosmetic.
+    added: :class:`datetime.datetime`
+        Datetime object which represents when the LEGO cosmetic was added to the API.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -240,6 +480,42 @@ class LegoCosmetic:
 
 
 class LegoKitCosmetic:
+    """Represents a LEGO kit cosmetic.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the LEGO kit cosmetic.
+    name: :class:`str`
+        The name of the LEGO kit cosmetic.
+    type: :class:`CosmeticType`
+        Object containing information on cosmetic type.
+    value: :class:`str`
+        The value of the LEGO kit cosmetic.
+    display_value: :class:`str`
+        The display value of the LEGO kit cosmetic.
+    backend_value: :class:`str`
+        The backend value of the LEGO kit cosmetic.
+    series: :class:`Series`
+        Object containing information on cosmetic series.
+    gameplay_tags: :class:`list`[:class:`str`]
+        List of the LEGO kit cosmetic gameplay tags.
+    small_image: :class:`str`
+        The small image of the LEGO kit cosmetic.
+    large_image: :class:`str`
+        The large image of the LEGO kit cosmetic.
+    wide_image: :class:`str`
+        The wide image of the LEGO kit cosmetic.
+    path: :class:`str`
+        File path of cosmetic.
+    added: :class:`datetime.datetime`
+        Datetime object which represents when the LEGO kit cosmetic was added to the API.
+    shop_history: :class:`list`[:class:`datetime.datetime`]
+        List of datetime objects which represent a shop release.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -266,6 +542,32 @@ class LegoKitCosmetic:
 
 
 class BeanCosmetic:
+    """Represents a Bean cosmetic.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    id: :class:`str`
+        The ID of the Bean cosmetic.
+    cosmetic_id: :class:`str`
+        The associated cosmetic ID.
+    name: :class:`str`
+        The name of the Bean cosmetic.
+    gender: :class:`str`
+        The gender of the Bean cosmetic.
+    gameplay_tags: :class:`list`[:class:`str`]
+        List of the Bean cosmetic gameplay tags.
+    small_image: :class:`str`
+        The small image of the Bean cosmetic.
+    large_image: :class:`str`
+        The large image of the Bean cosmetic.
+    path: :class:`str`
+        File path of cosmetic.
+    added: :class:`datetime.datetime`
+        Datetime object which represents when the Bean cosmetic was added to the API.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
@@ -283,6 +585,26 @@ class BeanCosmetic:
 
 
 class AllCosmetics:
+    """Represents all cosmetics grouped by type.
+
+    Attributes
+    ----------
+    br: :class:`list`[:class:`BRCosmetic`]
+        List of Battle Royale cosmetics.
+    tracks: :class:`list`[:class:`TrackCosmetic`]
+        List of track cosmetics.
+    instruments: :class:`list`[:class:`InstrumentCosmetic`]
+        List of instrument cosmetics.
+    cars: :class:`list`[:class:`CarCosmetic`]
+        List of car cosmetics.
+    lego: :class:`list`[:class:`LegoCosmetic`]
+        List of LEGO cosmetics.
+    lego_kits: :class:`list`[:class:`LegoKitCosmetic`]
+        List of LEGO kit cosmetics.
+    beans: :class:`list`[:class:`BeanCosmetic`]
+        List of Bean cosmetics.
+    """
+
     def __init__(self, data: dict) -> None:
         self.br: list[BRCosmetic] = [
             BRCosmetic(cosmetic_data)
@@ -314,6 +636,18 @@ class AllCosmetics:
         ]
 
 class NewCosmeticsType:
+    """Represents a grouped set of newly added cosmetics of a specific type.
+
+    Attributes
+    ----------
+    hash: :class:`str`
+        Hash of the cosmetic data used to detect changes.
+    last_addition: :class:`datetime.datetime`
+        Datetime of the most recent addition for the cosmetic type.
+    items: :class:`list`
+        List of cosmetics of the given type.
+    """
+
     def __init__(self,
                  hash: str,
                  last_addition: str,
@@ -331,6 +665,36 @@ class NewCosmeticsType:
 
 
 class NewCosmetics:
+    """Represents newly added cosmetics.
+
+    Attributes
+    ----------
+    date: :class:`datetime.datetime`
+        Datetime when the new cosmetics data was generated.
+    hash: :class:`str`
+        Hash of all cosmetic data used for change detection.
+    last_addition: :class:`str`
+        Datetime string of the most recent cosmetic addition.
+    build: :class:`str`
+        The current Fortnite build version.
+    previous_build: :class:`str`
+        The previous Fortnite build version.
+    br: :class:`NewCosmeticsType`
+        Newly added Battle Royale cosmetics.
+    tracks: :class:`NewCosmeticsType`
+        Newly added track cosmetics.
+    instruments: :class:`NewCosmeticsType`
+        Newly added instrument cosmetics.
+    cars: :class:`NewCosmeticsType`
+        Newly added car cosmetics.
+    lego: :class:`NewCosmeticsType`
+        Newly added LEGO cosmetics.
+    lego_kits: :class:`NewCosmeticsType`
+        Newly added LEGO kit cosmetics.
+    beans: :class:`NewCosmeticsType`
+        Newly added Bean cosmetics.
+    """
+
     def __init__(self, data: dict) -> None:
         self.date: datetime.datetime = datetime.datetime.fromisoformat(
             data.get('date', '1970-01-01T00:00:00Z').replace('Z', '+00:00')

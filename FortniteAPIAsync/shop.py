@@ -10,6 +10,18 @@ from .cosmetics import (
 
 
 class ShopBundle:
+    """Represents a shop bundle.
+
+    Attributes
+    ----------
+    name: :class:`str`
+        The name of the bundle.
+    info: :class:`str`
+        Additional information about the bundle.
+    image: :class:`str`
+        The image associated with the bundle.
+    """
+
     def __init__(self, data: dict) -> None:
         self.name = data.get('name')
         self.info = data.get('info')
@@ -17,6 +29,18 @@ class ShopBundle:
 
 
 class ShopBanner:
+    """Represents a shop banner.
+
+    Attributes
+    ----------
+    value: :class:`str`
+        The banner value.
+    intensity: :class:`str`
+        The banner intensity.
+    backend_value: :class:`str`
+        The backend value of the banner.
+    """
+
     def __init__(self, data: dict) -> None:
         self.value = data.get('value')
         self.intensity = data.get('intensity')
@@ -24,12 +48,52 @@ class ShopBanner:
 
 
 class OfferTag:
+    """Represents an offer tag.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the offer tag.
+    text: :class:`str`
+        The text of the offer tag.
+    """
+
     def __init__(self, data: dict) -> None:
         self.id = data.get('id')
         self.text = data.get('text')
 
 
 class Layout:
+    """Represents a shop layout.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the layout.
+    name: :class:`str`
+        The name of the layout.
+    category: :class:`str`
+        The category of the layout.
+    index: :class:`int`
+        The index of the layout.
+    rank: :class:`int`
+        The rank of the layout.
+    show_ineligible_offers: :class:`bool`
+        Whether ineligible offers are shown.
+    background: :class:`str`
+        The background of the layout.
+    use_wide_preview: :class:`bool`
+        Whether wide preview is used.
+    display_type: :class:`str`
+        The display type of the layout.
+    texture_metadata: :class:`list`
+        List of texture metadata.
+    string_metadata: :class:`list`
+        List of string metadata.
+    text_metadata: :class:`list`
+        List of text metadata.
+    """
+
     def __init__(self, data: dict) -> None:
         self.id = data.get('id')
         self.name = data.get('name')
@@ -47,6 +111,20 @@ class Layout:
 
 
 class Colors:
+    """Represents colour configuration.
+
+    Attributes
+    ----------
+    color_1: :class:`str`
+        The primary colour.
+    color_2: :class:`str`
+        The secondary colour.
+    color_3: :class:`str`
+        The tertiary colour.
+    text_background_color: :class:`str`
+        The text background colour.
+    """
+
     def __init__(self, data: dict) -> None:
         self.color_1: str = data.get('color1')
         self.color_2: str = data.get('color2')
@@ -55,6 +133,26 @@ class Colors:
 
 
 class MaterialInstances:
+    """Represents a material instance.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the material instance.
+    primary_mode: :class:`str`
+        The primary mode of the material instance.
+    product_tag: :class:`str`
+        The product tag associated with the material instance.
+    images: :class:`dict`
+        Image data for the material instance.
+    colors: :class:`dict`
+        Color data for the material instance.
+    scalings: :class:`dict`
+        Scaling data for the material instance.
+    flags: :class:`dict`
+        Flag data for the material instance.
+    """
+
     def __init__(self, data: dict) -> None:
         self.id: str = data.get('id')
         self.primary_mode: str = data.get('primaryMode')
@@ -66,6 +164,18 @@ class MaterialInstances:
 
 
 class RenderImages:
+    """Represents a render image.
+
+    Attributes
+    ----------
+    product_tag: :class:`str`
+        The product tag associated with the render image.
+    file_name: :class:`str`
+        The file name of the render image.
+    image: :class:`str`
+        The render image URL.
+    """
+
     def __init__(self, data: dict) -> None:
         self.product_tag: str = data.get('productTag')
         self.file_name: str = data.get('fileName')
@@ -73,6 +183,20 @@ class RenderImages:
 
 
 class NewDisplayAsset:
+    """Represents a new display asset.
+
+    Attributes
+    ----------
+    id: :class:`str`
+        The ID of the display asset.
+    cosmetic_id: :class:`str`
+        The associated cosmetic ID.
+    material_instances: :class:`list`[:class:`MaterialInstances`]
+        List of material instances.
+    render_images: :class:`list`[:class:`RenderImages`]
+        List of render images.
+    """
+
     def __init__(self, data: dict) -> None:
         self.id: str = data.get('id')
         self.cosmetic_id: str = data.get('cosmeticId')
@@ -87,6 +211,62 @@ class NewDisplayAsset:
 
 
 class ShopEntry:
+    """Represents a shop entry.
+
+    Attributes
+    ----------
+    regular_price: :class:`int`
+        The regular price of the offer.
+    final_price: :class:`int`
+        The final price of the offer.
+    dev_name: :class:`str`
+        The developer name of the offer.
+    offer_id: :class:`str`
+        The offer ID.
+    in_date: :class:`datetime.datetime`
+        Datetime when the offer becomes available.
+    out_date: :class:`datetime.datetime`
+        Datetime when the offer is removed.
+    bundle: :class:`ShopBundle`
+        Bundle information for the offer.
+    banner: :class:`ShopBanner`
+        Banner information for the offer.
+    offer_tag: :class:`OfferTag`
+        Offer tag associated with the entry.
+    giftable: :class:`bool`
+        Whether the offer is giftable.
+    refundable: :class:`bool`
+        Whether the offer is refundable.
+    sort_priority: :class:`int`
+        The sorting priority of the offer.
+    layout_id: :class:`str`
+        The layout ID of the offer.
+    layout: :class:`Layout`
+        Layout information for the offer.
+    colors: :class:`Colors`
+        Color configuration for the offer.
+    tile_background_material: :class:`str`
+        The tile background material.
+    tile_size: :class:`str`
+        The tile size.
+    display_asset_path: :class:`str`
+        The display asset path.
+    new_display_asset_path: :class:`str`
+        The new display asset path.
+    new_display_asset: :class:`NewDisplayAsset`
+        New display asset information.
+    br_items: :class:`list`[:class:`BRCosmetic`]
+        List of Battle Royale cosmetics included.
+    tracks: :class:`list`[:class:`TrackCosmetic`]
+        List of track cosmetics included.
+    instruments: :class:`list`[:class:`InstrumentCosmetic`]
+        List of instrument cosmetics included.
+    cars: :class:`list`[:class:`CarCosmetic`]
+        List of car cosmetics included.
+    lego_kits: :class:`list`[:class:`LegoKitCosmetic`]
+        List of LEGO kit cosmetics included.
+    """
+
     def __init__(self, data: dict) -> None:
         self.regular_price = data.get('regularPrice')
         self.final_price = data.get('finalPrice')
@@ -143,6 +323,22 @@ class ShopEntry:
 
 
 class Shop:
+    """Represents the Fortnite item shop.
+
+    Attributes
+    ----------
+    raw: :class:`dict`
+        Raw data from FortniteAPI (can be used to reconstruct object)
+    hash: :class:`str`
+        Hash of the shop data used for change detection.
+    date: :class:`datetime.datetime`
+        Datetime when the shop data was generated.
+    vbuck_icon: :class:`str`
+        The V-Bucks icon image.
+    entries: :class:`list`[:class:`ShopEntry`]
+        List of shop entries.
+    """
+
     def __init__(self, data: dict) -> None:
         self.raw: dict = data
 
