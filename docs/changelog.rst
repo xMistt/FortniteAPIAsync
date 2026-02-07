@@ -5,6 +5,14 @@ Changelog
 
 Detailed version changes.
 
+v2.0.1
+------
+
+Added
+~~~~~
+
+- Added the support to use :class:`APIClient` as an async context manager.
+
 v2.0.0
 ------
 

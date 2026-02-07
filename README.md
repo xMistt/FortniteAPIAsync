@@ -57,17 +57,17 @@ bot = commands.Bot(
         code=input('Enter authorization code: ')
     )
 )
-fortnite_api = FortniteAPIAsync.APIClient()
 
 
 @bot.command()
 async def skin(ctx: rebootpy.ext.commands.Context, *, content: str) -> None:
     try:
-        cosmetic = await fortnite_api.get_cosmetic(
-            matchMethod="contains",
-            name=content,
-            backendType="AthenaCharacter"
-        )
+        async with FortniteAPIAsync.APIClient() as client:
+            cosmetic = await client.get_cosmetic(
+                matchMethod="contains",
+                name=content,
+                backendType="AthenaCharacter"
+            )
 
         await bot.party.me.set_outfit(asset=cosmetic.id)
         await ctx.send(f'Skin set to {cosmetic.id}.')
