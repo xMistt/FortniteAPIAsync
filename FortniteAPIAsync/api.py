@@ -29,6 +29,13 @@ class APIClient:
 
         self.cosmetics = Cosmetics(self)
 
+    async def __aenter__(self) -> 'APIClient':
+        await self.http.set_session()
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb) -> None:
+        await self.close()
+
     async def close(self) -> None:
         await self.http.close()
 

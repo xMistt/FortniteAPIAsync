@@ -28,6 +28,11 @@ class HTTPClient:
             await self.session.close()
             self.session = None
 
+    async def set_session(self) -> None:
+        self.session = aiohttp.ClientSession(
+            headers=self.headers
+        )
+
     async def api_request(self,
                       url: str,
                       method: str = 'GET',
@@ -35,9 +40,7 @@ class HTTPClient:
                       **kwargs: Any
                       ) -> dict:
         if not self.session:
-            self.session = aiohttp.ClientSession(
-                headers=self.headers
-            )
+            await self.set_session()
 
         async with self.session.request(
             method=method,
