@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntFlag
 
 
 class AccountType(Enum):
@@ -24,3 +24,9 @@ class AESKeyFormat(Enum):
     HEX    = 'hex'
     BASE64 = 'base64'
 
+
+class ResponseFlags(IntFlag):
+    NONE                    = 0
+    INCLUDE_PATHS           = 1 << 0
+    INCLUDE_GAMEPLAY_TAGS   = 1 << 1
+    INCLUDE_SHOP_HISTORY    = 1 << 2

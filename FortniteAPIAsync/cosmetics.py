@@ -1,5 +1,6 @@
 from .enums import *
 from .exceptions import *
+from .utils import combine_flags
 
 import datetime
 
@@ -59,7 +60,7 @@ class BRCosmetic:
         self.type = CosmeticType(data.get('type', {}))
         self.rarity = Rarity(data.get('rarity', {}))
         self.series = Series(data.get('series', {}))
-        self.set = data.get('set')
+        self.set = Set(data.get('set', {}))
         self.introduction = Introduction(data.get('introduction', {}))
         self.images = data.get('images')
         self.variants = data.get('variants')
@@ -73,6 +74,7 @@ class BRCosmetic:
         self.item_preview_hero_path = data.get('itemPreviewHeroPath')
         self.display_asset_path = data.get('displayAssetPath')
         self.definition_path = data.get('definitionPath')
+        self.path = data.get('path')
         self.added = datetime.datetime.fromisoformat(
             data['added'].replace('Z', '+00:00')
         )
@@ -402,7 +404,10 @@ class Cosmetics:
     def __init__(self, client: 'APIClient') -> None:
         self.client = client
 
-    async def get_cosmetic(self, **params: dict) -> BRCosmetic:
+    async def get_cosmetic(self,
+                           flags: list[ResponseFlags] = [ResponseFlags.NONE],
+                           **params: dict
+                           ) -> BRCosmetic:
         """|coro|
 
         Fetches first cosmetic matching parameters.
@@ -412,6 +417,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
         searchLanguage: Optional[:class:`str`]
             Sets the search language.
         matchMethod: Optional[:class:`str`]
@@ -499,13 +506,17 @@ class Cosmetics:
                 'No search parameters provided. At least 1 is required.'
             )
 
+        params["responseFlags"] = int(combine_flags(flags))
         data = await self.client.http.api_request(
             url="/v2/cosmetics/br/search",
             params=params
         )
         return BRCosmetic(data)
 
-    async def get_cosmetics(self, **params: dict) -> list[BRCosmetic]:
+    async def get_cosmetics(self,
+                            flags: list[ResponseFlags] = [ResponseFlags.NONE],
+                            **params: dict
+                            ) -> list[BRCosmetic]:
         """|coro|
 
         Fetches all cosmetics matching parameters.
@@ -515,6 +526,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
         searchLanguage: Optional[:class:`str`]
             Sets the search language.
         matchMethod: Optional[:class:`str`]
@@ -603,6 +616,7 @@ class Cosmetics:
                 'No search parameters provided. At least 1 is required.'
             )
 
+        params["responseFlags"] = int(combine_flags(flags))
         data = await self.client.http.api_request(
             url="/v2/cosmetics/br/search/all",
             params=params
@@ -610,10 +624,12 @@ class Cosmetics:
 
         return [BRCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def search_cosmetic_ids(self,
-                                  fortnite_ids: str = None,
-                                  language: str = 'en'
-                                  ) -> list[BRCosmetic]:
+    async def search_cosmetic_ids(
+        self,
+        fortnite_ids: str = None,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> list[BRCosmetic]:
         """|coro|
 
         Fetches all cosmetics from id/s.
@@ -624,6 +640,8 @@ class Cosmetics:
             Sets the output language.
         fortnite_ids: Optional[:class:`str`]
             Sets the cosmetic id (can be multiple).
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Raises
         ------
@@ -648,14 +666,16 @@ class Cosmetics:
             url="/v2/cosmetics/br/search/ids",
             params={
                 "language": language,
-                "id": fortnite_ids
+                "id": fortnite_ids,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [BRCosmetic(cosmetic_data) for cosmetic_data in data]
 
     async def get_all_br_cosmetics(self,
-                                   language: str = 'en'
+                                   language: str = 'en',
+                                   flags: list[ResponseFlags] = [ResponseFlags.NONE]
                                    ) -> List[BRCosmetic]:
         """|coro|
 
@@ -665,6 +685,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -676,13 +698,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/br/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [BRCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def get_new_cosmetics(self, language: str = 'en') -> NewCosmetics:
+    async def get_new_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> NewCosmetics:
         """|coro|
 
         Fetches all new cosmetics.
@@ -691,6 +718,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -702,13 +731,19 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/new",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return NewCosmetics(data)
 
-    async def get_cosmetic_from_id(self, fortnite_id: str = None, language: str = 'en') -> BRCosmetic:
+    async def get_cosmetic_from_id(
+            self,
+            fortnite_id: str = None,
+            language: str = 'en',
+            flags: list[ResponseFlags] = [ResponseFlags.NONE],
+    ) -> BRCosmetic:
         """|coro|
 
         Fetches cosmetic from id.
@@ -717,6 +752,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
         fortnite_id: Optional[:class:`str`]
             Sets the cosmetic id (can be multiple).
 
@@ -740,15 +777,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url=f"/v2/cosmetics/br/{fortnite_id}",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return BRCosmetic(data)
 
-    async def get_all_cosmetics(self,
-                                language: str = 'en'
-                                ) -> AllCosmetics:
+    async def get_all_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> AllCosmetics:
         """|coro|
 
         Fetches all cosmetics.
@@ -757,6 +797,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -767,15 +809,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return AllCosmetics(data)
 
-    async def get_all_track_cosmetics(self,
-                                   language: str = 'en'
-                                   ) -> List[TrackCosmetic]:
+    async def get_all_track_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> List[TrackCosmetic]:
         """|coro|
 
         Fetches all track cosmetics.
@@ -784,6 +829,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -796,15 +843,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/tracks/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [TrackCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def get_all_instrument_cosmetics(self,
-                                           language: str = 'en'
-                                           ) -> list[InstrumentCosmetic]:
+    async def get_all_instrument_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> list[InstrumentCosmetic]:
         """|coro|
 
         Fetches all instrument cosmetics.
@@ -813,6 +863,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -825,15 +877,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/instruments/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [InstrumentCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def get_all_car_cosmetics(self,
-                                    language: str = 'en'
-                                    ) -> list[CarCosmetic]:
+    async def get_all_car_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> list[CarCosmetic]:
         """|coro|
 
         Fetches all car cosmetics.
@@ -842,6 +897,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -854,15 +911,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/cars/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [CarCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def get_all_lego_cosmetics(self,
-                                     language: str = 'en'
-                                     ) -> list[LegoCosmetic]:
+    async def get_all_lego_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> list[LegoCosmetic]:
         """|coro|
 
         Fetches all lego cosmetics.
@@ -871,6 +931,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -882,15 +944,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/lego/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [LegoCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def get_all_lego_kit_cosmetics(self,
-                                         language: str = 'en'
-                                         ) -> list[LegoKitCosmetic]:
+    async def get_all_lego_kit_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> list[LegoKitCosmetic]:
         """|coro|
 
         Fetches all lego kit cosmetics.
@@ -899,6 +964,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -911,15 +978,18 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/lego/kits/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 
         return [LegoKitCosmetic(cosmetic_data) for cosmetic_data in data]
 
-    async def get_all_bean_cosmetics(self,
-                                     language: str = 'en'
-                                     ) -> list[BeanCosmetic]:
+    async def get_all_bean_cosmetics(
+        self,
+        language: str = 'en',
+        flags: list[ResponseFlags] = [ResponseFlags.NONE]
+    ) -> list[BeanCosmetic]:
         """|coro|
 
         Fetches all bean cosmetics.
@@ -928,6 +998,8 @@ class Cosmetics:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: Optional[:class:`list`[:class:`ResponseFlags`]]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -940,7 +1012,8 @@ class Cosmetics:
         data = await self.client.http.api_request(
             url="/v2/cosmetics/beans/",
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
 

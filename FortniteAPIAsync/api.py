@@ -1,7 +1,12 @@
 from .http import HTTPClient
 from .cosmetics import Cosmetics
-from .enums import AESKeyFormat, StatsTimeWindow, StatsImage, AccountType
-
+from .enums import (
+    AESKeyFormat,
+    StatsTimeWindow,
+    StatsImage,
+    AccountType,
+    ResponseFlags
+)
 from .aes import AESKeys
 from .creator_code import CreatorCode
 from .map import Map
@@ -10,6 +15,7 @@ from .playlists import Playlist
 from .stats import Stats
 from .banners import Banner, BannerColor
 from .shop import Shop
+from .utils import combine_flags
 
 
 class APIClient:
@@ -242,7 +248,8 @@ class APIClient:
         return Stats(data)
 
     async def get_banners(self,
-                          language: str = "en"
+                          language: str = "en",
+                          flags: list[ResponseFlags] = [ResponseFlags.NONE]
                           ) -> list[Banner]:
         """|coro|
 
@@ -252,6 +259,8 @@ class APIClient:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: :class:`list`[:class:`ResponseFlags`]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -260,7 +269,8 @@ class APIClient:
         data = await self.http.api_request(
             url=f'/v1/banners',
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
         return [Banner(raw_banner) for raw_banner in data]
@@ -290,7 +300,8 @@ class APIClient:
         return [BannerColor(raw_colour) for raw_colour in data]
 
     async def get_shop(self,
-                       language: str = "en"
+                       language: str = "en",
+                       flags: list[ResponseFlags] = [ResponseFlags.NONE]
                        ) -> Shop:
         """|coro|
 
@@ -300,6 +311,8 @@ class APIClient:
         ----------
         language: Optional[:class:`str`]
             Sets the output language.
+        flags: :class:`list`[:class:`ResponseFlags`]
+            Opt-in for certain properties, defaults to `[ResponseFlags.NONE]`.
 
         Returns
         -------
@@ -308,7 +321,8 @@ class APIClient:
         data = await self.http.api_request(
             url=f'/v2/shop',
             params={
-                "language": language
+                "language": language,
+                "responseFlags": combine_flags(flags)
             }
         )
         return Shop(data)
