@@ -18,10 +18,8 @@ Cosmetics
 
 .. attributetable:: Cosmetics
 
-    Provides access to cosmetic-related API endpoints.
-
-    .. autoclass:: Cosmetics()
-        :members:
+.. autoclass:: Cosmetics()
+    :members:
 
 
 Enumerations
