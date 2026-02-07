@@ -26,13 +26,13 @@ Added
     - :meth:`APIClient.get_banner_colors()`
     - :meth:`APIClient.get_shop()`
 - Added the following functions to :class:`Cosmetics`:
-    - :meth:`APIClient.get_all_cosmetics()`
-    - :meth:`APIClient.get_all_track_cosmetics()`
-    - :meth:`APIClient.get_all_instrument_cosmetics()`
-    - :meth:`APIClient.get_all_car_cosmetics()`
-    - :meth:`APIClient.get_all_lego_cosmetics()`
-    - :meth:`APIClient.get_all_lego_kit_cosmetics()`
-    - :meth:`APIClient.get_all_bean_cosmetics()`
+    - :meth:`Cosmetics.get_all_cosmetics()`
+    - :meth:`Cosmetics.get_all_track_cosmetics()`
+    - :meth:`Cosmetics.get_all_instrument_cosmetics()`
+    - :meth:`Cosmetics.get_all_car_cosmetics()`
+    - :meth:`Cosmetics.get_all_lego_cosmetics()`
+    - :meth:`Cosmetics.get_all_lego_kit_cosmetics()`
+    - :meth:`Cosmetics.get_all_bean_cosmetics()`
 
 Bug Fixes
 ~~~~~
@@ -42,8 +42,8 @@ Bug Fixes
 Changes
 ~~~~~~~
 
-- (**Breaking**) Old `Client.get_all_cosmetics()` renamed to :meth:`APIClient.get_all_cosmetics()`.
-- (**Breaking**) :meth:`get_new_cosmetics()` now returns a :class:`NewCosmetics` object.
+- (**Breaking**) Old `Cosmetics.get_all_cosmetics()` renamed to :meth:`Cosmetics.get_all_cosmetics()`.
+- (**Breaking**) :meth:`Cosmetics.get_new_cosmetics()` now returns a :class:`NewCosmetics` object.
 - (**Breaking**) The following attributes of :class:`BRCosmetic` have been updated from a dictionary to a data class: `type`, `rarity`, `series`, `set`, `introduction`.
 
 
